@@ -18,6 +18,10 @@ class LibrarySearchUseCase {
     _controller.addError(error, stackTrace);
   }
 
+  void clearMangas() {
+    _mangas.clear();
+  }
+
   void dispose() {
     _controller.close();
   }

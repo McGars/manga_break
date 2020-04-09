@@ -47,6 +47,21 @@ class ReadMangaStrategy implements MangaStrategy {
     return ReadMangaPageConverter().convert(document);
   }
 
+  @override
+  Future<List<MangaItem>> search(String query, Pagination pagination) async {
+
+    var data = <String, String> {
+      "q": query.replaceAll(" ", "_")
+    };
+
+    var url = Uri.https(host, "/search/advanced", data);
+    var response = await http.post(url);
+    var document = parse(response.body);
+
+
+    return ReadMangaListConverter().convert(document);
+  }
+
   Uri _buildUrlForMangas(Pagination pagination) {
     var genre = pagination.genre == null ? "" : "/genre/${pagination.genre}";
     var query = <String, String>{};
@@ -54,9 +69,15 @@ class ReadMangaStrategy implements MangaStrategy {
     if (pagination.sort != null) {
       query["sortType"] = pagination.sort;
     }
-    query["offset"] = "${pagination.page * pageOffset}";
-    query["max"] = "$pageOffset";
+
+    addOffsetPagination(query, pagination);
 
     return Uri.https(host, "/list$genre", query);
   }
+
+  void addOffsetPagination(Map<String, String> query, Pagination pagination) {
+    query["offset"] = "${pagination.page * pageOffset}";
+    query["max"] = "$pageOffset";
+  }
+
 }

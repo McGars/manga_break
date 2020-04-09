@@ -21,4 +21,10 @@ class MangaContext {
     var paginationController = currentStrategy.paginationController;
     return await mangaStrategy.getMangas(paginationController.getPagination(page));
   }
+
+  Future<List<MangaItem>> search(String search, int page) async {
+    var mangaStrategy = currentStrategy.mangaStrategy;
+    var paginationController = currentStrategy.paginationController;
+    return await mangaStrategy.search(search, paginationController.getPagination(page));
+  }
 }

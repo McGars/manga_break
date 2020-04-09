@@ -72,6 +72,8 @@ class _LibraryScreenState
           child: Scrollbar(
             child: LoadMore(
               isFinish: false,
+              whenEmptyLoad: false,
+              textBuilder: (status) => appLocalizations.loading,
               onLoadMore: presenter.loadData,
               child: ListView.builder(
                 itemCount: items.length,

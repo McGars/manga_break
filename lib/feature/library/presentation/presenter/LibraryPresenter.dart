@@ -1,5 +1,6 @@
 import 'package:manga/core/presentation/BasePresenter.dart';
 import 'package:manga/core/state/LoadingState.dart';
+import 'package:manga/core/utils/Debouncer.dart';
 import 'package:manga/feature/library/domain/use_case/LibrarySearchUseCase.dart';
 import 'package:manga/feature/library/presentation/view/LibraryState.dart';
 import 'package:manga/feature/library/presentation/view/LibraryView.dart';
@@ -17,14 +18,13 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
   var _viewState = LibraryState(items: []);
   var _currentPage = 0;
   var _librarySearchUseCase = LibrarySearchUseCase();
+  var _debauncer = Debouncer();
 
   Stream<List<MangaItem>> get mangaListStream => _librarySearchUseCase.mangas;
 
   var _mangaStrategies = <StrategyHolder>[
-    StrategyHolder(
-        MyApp.injector.get<ReadMangaStrategy>(),
-        MyApp.injector.get<ReadMangaPaginationController>()
-    )
+    StrategyHolder(MyApp.injector.get<ReadMangaStrategy>(),
+        MyApp.injector.get<ReadMangaPaginationController>())
   ];
 
   LibraryPresenter() {
@@ -39,26 +39,35 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
   }
 
   Future<bool> loadData() async {
-    await _mangaContext
-        .executeStrategyList(_currentPage++)
+    var query = (_viewState.searchText == null || _viewState.searchText.isEmpty)
+        ? _mangaContext.executeStrategyList(_currentPage++)
+        : _mangaContext.search(_viewState.searchText, _currentPage++);
+
+    await query
         .then((value) => _librarySearchUseCase.addMangas(value))
         .catchError(_librarySearchUseCase.addErrors);
+
     return true;
   }
 
   void onItemSelected(MangaItem item) {
-    var parameters = MangaDetailParameter(item, _mangaContext.currentStrategy.mangaStrategy);
+    var parameters =
+        MangaDetailParameter(item, _mangaContext.currentStrategy.mangaStrategy);
     MangaNavigator.openDetailsScreen(parameters);
   }
 
-  search(String query) {
-
+  void search(String query) {
+    _debauncer.run(() {
+      logger.d("search: $query");
+      _librarySearchUseCase.clearMangas();
+      _currentPage = 0;
+      _viewState.searchText = query;
+      loadData();
+    });
   }
 
-  setSearchState() {
-    view.bindState(_viewState.clone(
-      isSearching: true
-    ));
+  void setSearchState() {
+    view.bindState(_viewState.clone(isSearching: true));
   }
 
   void onClearSearchButtonClicked() {
@@ -77,5 +86,4 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
     _librarySearchUseCase.dispose();
     super.dispose();
   }
-
 }

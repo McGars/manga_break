@@ -13,6 +13,7 @@ class AppLocalizations {
 
   // Common
   String get ofTest => _text('of');
+  String get loading => _text('loading');
 
   // Error
   String get errorUiDefault => _text('errorUiDefault');
@@ -30,6 +31,7 @@ class AppLocalizations {
 
       // common
       'of': "из",
+      'loading': "Загрузка",
 
       // errors
       'errorUiDefault': "Ошибка. Попробуйте позже",
@@ -46,6 +48,7 @@ class AppLocalizations {
     'en': {
       // common
       'of': "of",
+      'loading': "loading",
 
       // errors
       'errorUiDefault': "Error. Please try later",

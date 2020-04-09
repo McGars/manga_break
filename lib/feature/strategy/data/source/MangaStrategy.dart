@@ -13,4 +13,6 @@ abstract class MangaStrategy {
 
   Future<List<MangaPage>> getMangaPage(Chapter chapter);
 
+  Future<List<MangaItem>> search(String query, Pagination pagination);
+
 }
