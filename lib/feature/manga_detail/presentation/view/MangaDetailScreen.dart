@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
+import 'package:manga/core/state/LoadingState.dart';
 import 'package:manga/core/widget/ClickBehaviuor.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart';
@@ -32,9 +33,14 @@ class _MangaDetailScreenState
   @override
   Widget buildWidgetFromState() {
     var state = screenState;
-    return state is MangaDetailsState
-        ? _buildDetails(state)
-        : _wrapWithAppBar(super.buildWidgetFromState());
+
+    if (state is LoadingState) {
+      return Scaffold(body: super.buildWidgetFromState());
+    } else if (state is MangaDetailsState) {
+      return _buildDetails(state);
+    } else {
+      return _wrapWithAppBar(super.buildWidgetFromState());
+    }
   }
 
   String _getTitle() {
@@ -90,10 +96,12 @@ class _MangaDetailScreenState
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.network(state.image, width: 50, height: 70),
-          Expanded(flex: 2,child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Text(state.title, style: textStyle),
-          )),
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Text(state.title, style: textStyle),
+              )),
         ],
       ),
     );
@@ -201,5 +209,4 @@ class _MangaDetailScreenState
       child: widget,
     );
   }
-
 }

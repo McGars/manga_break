@@ -75,7 +75,7 @@ class _ReaderScreenState extends BaseWidgetState<ReaderScreen, ReaderPresenter>
                   maxScale: 3.0,
                   animationMaxScale: 3.0,
                   speed: 1.0,
-                  inertialSpeed: 100.0,
+                  inertialSpeed: 700.0,
                   initialScale: 1.0,
                   inPageView: true,
                   initialAlignment: InitialAlignment.center,
