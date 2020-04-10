@@ -29,11 +29,13 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
   }
 
   void handleMangaDetail(MangaDetail item) {
-    view.bindState(_state.bind(
-        imageThumb: item.imageThumb,
-        description: item.description,
-        currentChapterPosition: 0,
-        chapters: item.chapters));
+    view.bindState(
+      _state.bind(
+          imageThumb: item.imageThumb,
+          description: item.description,
+          currentChapterPosition: 0,
+          chapters: item.chapters),
+    );
   }
 
   onClickChapterPrevious() {
@@ -43,8 +45,8 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
   }
 
   onClickChapterPlay() {
-    MangaNavigator.openReaderScreen(
-        ReaderParameter(_state.chapters, _state.currentChapterPosition, _parameters.strategy));
+    MangaNavigator.openReaderScreen(ReaderParameter(
+        _state.chapters, _state.currentChapterPosition, _parameters.strategy));
   }
 
   onClickChapterNext() {

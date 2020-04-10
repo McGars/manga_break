@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:manga/core/localization/AppLocalizations.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/core/widget/ClickBehaviuor.dart';
 import 'package:manga/di/ModuleContainer.dart';
@@ -9,8 +8,6 @@ import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart'
 import 'package:manga/feature/manga_detail/presentation/presenter/MangaDetailsPresenter.dart';
 import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsState.dart';
 import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsView.dart';
-import 'package:manga/main.dart';
-import 'package:manga/route/route.dart';
 
 class MangaDetailScreen extends StatefulWidget {
   final MangaDetailParameter _item;
@@ -86,9 +83,19 @@ class _MangaDetailScreenState
   Widget _appBarTitle(MangaDetailsState state) {
     var textStyle =
         Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(state.title, style: textStyle),
+    return Container(
+      alignment: Alignment.bottomLeft,
+      padding: const EdgeInsets.only(left: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.network(state.image, width: 50, height: 70),
+          Expanded(flex: 2,child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: Text(state.title, style: textStyle),
+          )),
+        ],
+      ),
     );
   }
 

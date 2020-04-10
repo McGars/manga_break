@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:manga/core/localization/AppLocalizations.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/core/state/ErrorState.dart';
 import 'package:manga/core/state/LoadingState.dart';
@@ -84,7 +83,7 @@ class _LibraryScreenState
                     child: SlideAnimation(
                       verticalOffset: 50.0,
                       child: FadeInAnimation(
-                        child: getMangaItem(items[index]),
+                        child: _getMangaItem(items[index]),
                       ),
                     ),
                   );
@@ -102,7 +101,7 @@ class _LibraryScreenState
     return null;
   }
 
-  Widget getMangaItem(MangaItem item) {
+  Widget _getMangaItem(MangaItem item) {
     return ListTile(
       leading: Image.network(item.image),
       title: Text('${item.name}'),
