@@ -6,7 +6,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:logger/logger.dart';
 import 'package:manga/core/data/MangaHttp.dart';
-import 'package:manga/core/localization/AppLocalizations.dart';
+import 'package:manga/core/firebase/FirebaseUtil.dart';
+import 'package:manga/core/utils/AppLocalizations.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/route/route.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   static var injector = ModuleContainer().initialise(Injector.getInjector());
 
   MyApp() {
+    firebaInit();
     HttpOverrides.global = injector.get<MangaHttpOverrides>();
   }
 

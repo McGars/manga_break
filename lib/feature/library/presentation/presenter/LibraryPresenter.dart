@@ -5,6 +5,7 @@ import 'package:manga/feature/library/domain/use_case/LibrarySearchUseCase.dart'
 import 'package:manga/feature/library/presentation/view/LibraryState.dart';
 import 'package:manga/feature/library/presentation/view/LibraryView.dart';
 import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart';
+import 'package:manga/feature/profile/personal/domain/model/MangaUser.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
 import 'package:manga/feature/strategy/data/source/StrategyHolder.dart';
 import 'package:manga/feature/strategy/data/source/readmanga/ReadMangaPaginationController.dart';
@@ -66,7 +67,7 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
     });
   }
 
-  void setSearchState() {
+  void onSearchButtonClicked() {
     view.bindState(_viewState.clone(isSearching: true));
   }
 
@@ -81,9 +82,19 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
     view.bindState(_viewState);
   }
 
+  void onFavoriteButtonClicked() {
+    var user = MyApp.injector.get<MangaUser>();
+    if (!user.isAuthorize) {
+
+    } else {
+      // TODO отображать избранное
+    }
+  }
+
   @override
   void dispose() {
     _librarySearchUseCase.dispose();
     super.dispose();
   }
+
 }

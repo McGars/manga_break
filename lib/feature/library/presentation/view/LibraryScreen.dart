@@ -146,7 +146,11 @@ class _LibraryScreenState
     return <Widget>[
       IconButton(
         icon: const Icon(Icons.search),
-        onPressed: () => presenter.setSearchState(),
+        onPressed: presenter.onSearchButtonClicked,
+      ),
+      IconButton(
+        icon: const Icon(Icons.favorite),
+        onPressed: presenter.onFavoriteButtonClicked,
       ),
     ];
   }

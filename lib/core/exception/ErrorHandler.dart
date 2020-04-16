@@ -1,5 +1,5 @@
 import 'package:manga/core/exception/exceptions.dart';
-import 'package:manga/core/localization/AppLocalizations.dart';
+import 'package:manga/core/utils/AppLocalizations.dart';
 import 'package:manga/main.dart';
 
 class ErrorHandler {

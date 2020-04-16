@@ -1,9 +1,13 @@
+import 'package:firebase/firebase.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:manga/core/data/MangaHttp.dart';
-import 'package:manga/core/localization/AppLocalizations.dart';
+import 'package:manga/core/utils/AppLocalizations.dart';
+import 'package:manga/feature/profile/personal/domain/model/MangaUser.dart';
+import 'package:manga/feature/profile/personal/domain/use_case/MangaUserUseCase.dart';
 import 'package:manga/feature/strategy/data/source/readmanga/ReadMangaPaginationController.dart';
 import 'package:manga/feature/strategy/data/source/readmanga/ReadMangaStrategy.dart';
 import 'dart:ui' as ui;
+import 'package:firebase/firebase.dart' as fb;
 
 import 'package:manga/main.dart';
 
@@ -24,6 +28,14 @@ class ModuleContainer {
 
     // Core
     injector.map<MangaHttpOverrides>((i) => MangaHttpOverrides(), isSingleton: true);
+
+    // firebase
+    injector.map<Auth>((i) => fb.auth(), isSingleton: true);
+    injector.map<Database>((i) => fb.database(), isSingleton: true);
+
+    // Profile
+    injector.map<MangaUserUseCase>((i) => MangaUserUseCase(i.get<Auth>()), isSingleton: true);
+    injector.map<MangaUser>((i) => i.get<MangaUserUseCase>().mangaUser, isSingleton: false);
 
     // Strategy
     injector.map<ReadMangaStrategy>((i) => ReadMangaStrategy(), isSingleton: true);
