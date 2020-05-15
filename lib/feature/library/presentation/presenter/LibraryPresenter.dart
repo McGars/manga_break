@@ -4,7 +4,7 @@ import 'package:manga/core/utils/Debouncer.dart';
 import 'package:manga/feature/library/domain/use_case/LibrarySearchUseCase.dart';
 import 'package:manga/feature/library/presentation/view/LibraryState.dart';
 import 'package:manga/feature/library/presentation/view/LibraryView.dart';
-import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart';
+import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart';
 import 'package:manga/feature/profile/personal/domain/model/MangaUser.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
 import 'package:manga/feature/strategy/data/source/StrategyHolder.dart';
@@ -19,7 +19,7 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
   var _viewState = LibraryState(items: []);
   var _currentPage = 0;
   var _librarySearchUseCase = LibrarySearchUseCase();
-  var _debauncer = Debouncer();
+  var _debouncer = Debouncer();
 
   Stream<List<MangaItem>> get mangaListStream => _librarySearchUseCase.mangas;
 
@@ -58,7 +58,7 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
   }
 
   void search(String query) {
-    _debauncer.run(() {
+    _debouncer.run(() {
       logger.d("search: $query");
       _librarySearchUseCase.clearMangas();
       _currentPage = 0;
@@ -85,7 +85,7 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
   void onFavoriteButtonClicked() {
     var user = MyApp.injector.get<MangaUser>();
     if (!user.isAuthorize) {
-
+      MangaNavigator.openAuthScreen();
     } else {
       // TODO отображать избранное
     }

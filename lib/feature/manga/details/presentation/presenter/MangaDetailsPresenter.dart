@@ -1,9 +1,9 @@
 import 'package:manga/core/presentation/BasePresenter.dart';
 import 'package:manga/core/state/LoadingState.dart';
-import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart';
-import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsState.dart';
-import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsView.dart';
-import 'package:manga/feature/reader/data/model/ReaderParameter.dart';
+import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart';
+import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
+import 'package:manga/feature/manga/details/presentation/view/MangaDetailsView.dart';
+import 'package:manga/feature/manga/reader/data/model/ReaderParameter.dart';
 import 'package:manga/feature/strategy/data/model/MangaDetails.dart';
 import 'package:manga/route/route.dart';
 

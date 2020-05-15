@@ -1,4 +1,3 @@
-import 'package:firebase/firebase.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:manga/core/data/MangaHttp.dart';
 import 'package:manga/core/utils/AppLocalizations.dart';
@@ -7,9 +6,10 @@ import 'package:manga/feature/profile/personal/domain/use_case/MangaUserUseCase.
 import 'package:manga/feature/strategy/data/source/readmanga/ReadMangaPaginationController.dart';
 import 'package:manga/feature/strategy/data/source/readmanga/ReadMangaStrategy.dart';
 import 'dart:ui' as ui;
-import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firebase_io.dart';
 
 import 'package:manga/main.dart';
+
 
 
 //    injector.map<String>((i) => "https://api.com/", key: "apiUrl");
@@ -30,11 +30,12 @@ class ModuleContainer {
     injector.map<MangaHttpOverrides>((i) => MangaHttpOverrides(), isSingleton: true);
 
     // firebase
-    injector.map<Auth>((i) => fb.auth(), isSingleton: true);
-    injector.map<Database>((i) => fb.database(), isSingleton: true);
+    injector.map<FirebaseClient>((i) => FirebaseClient(null), isSingleton: false);
+//    injector.map<fb.Auth>((i) => fb.auth(), isSingleton: true);
+//    injector.map<fb.Database>((i) => fb.database(), isSingleton: true);
 
     // Profile
-    injector.map<MangaUserUseCase>((i) => MangaUserUseCase(i.get<Auth>()), isSingleton: true);
+    injector.map<MangaUserUseCase>((i) => MangaUserUseCase(/*i.get<fb.Auth>()*/), isSingleton: true);
     injector.map<MangaUser>((i) => i.get<MangaUserUseCase>().mangaUser, isSingleton: false);
 
     // Strategy

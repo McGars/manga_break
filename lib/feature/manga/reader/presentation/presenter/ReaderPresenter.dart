@@ -1,7 +1,7 @@
 import 'package:manga/core/presentation/BasePresenter.dart';
-import 'package:manga/feature/reader/data/model/ReaderParameter.dart';
-import 'package:manga/feature/reader/presentation/view/ReaderState.dart';
-import 'package:manga/feature/reader/presentation/view/ReaderView.dart';
+import 'package:manga/feature/manga/reader/data/model/ReaderParameter.dart';
+import 'package:manga/feature/manga/reader/presentation/view/ReaderState.dart';
+import 'package:manga/feature/manga/reader/presentation/view/ReaderView.dart';
 
 class ReaderPresenter extends BasePresenter<ReaderView> {
   ReaderParameter _parameter;

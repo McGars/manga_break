@@ -17,6 +17,16 @@ class AppLocalizations {
 
   // Error
   String get errorUiDefault => _text('errorUiDefault');
+  String get errorEmpty => _text('errorEmpty');
+
+  // Auth screen
+  String get authScreenTitle => _text('authScreenTitle');
+  
+  // Auth email screen
+  String get authEmailScreenEmail => _text('authEmailScreenEmail');
+  String get authEmailScreenEnterEmail => _text('authEmailScreenEnterEmail');
+  String get authEmailScreenEnterPassword => _text('authEmailScreenEnterPassword');
+  String get authEmailScreenEnterValidEmail => _text('authEmailScreenEnterValidEmail');
 
   // Manga details screen
   String get detailsScreenEmptyChapters => _text('detailsScreenEmptyChapters');
@@ -25,6 +35,8 @@ class AppLocalizations {
   // Library screen
   String get libraryScreenTitle => _text('libraryScreenTitle');
   String get libraryScreenSearchData => _text('libraryScreenSearchData');
+
+
 
   static Map<String, Map<String, String>> _localizedValues = {
     'ru': {
@@ -35,6 +47,14 @@ class AppLocalizations {
 
       // errors
       'errorUiDefault': "Ошибка. Попробуйте позже",
+      'errorEmpty': "Поле не должно быть пустым",
+
+      // Auth screen
+      'authScreenTitle': "Авторизация",
+      'authEmailScreenEmail': "Авторизация",
+      'authEmailScreenEnterEmail': "Введите электронную почту",
+      'authEmailScreenEnterPassword': "Введите пароль",
+      'authEmailScreenEnterValidEmail': "Неверный формат почты",
 
       // Details screen
       'detailsScreenEmptyChapters': "Главы отсутствуют",
@@ -52,6 +72,14 @@ class AppLocalizations {
 
       // errors
       'errorUiDefault': "Error. Please try later",
+      'errorEmpty': "Please enter some text",
+
+      // Auth screen
+      'authScreenTitle': "Auth",
+      'authEmailScreenEmail': "Auth by Email",
+      'authEmailScreenEnterEmail': "Enter your email",
+      'authEmailScreenEnterPassword': "Enter your password",
+      'authEmailScreenEnterValidEmail': "Enter Valid Email",
 
       // Details screen
       'detailsScreenEmptyChapters': "No chapters",

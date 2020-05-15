@@ -55,45 +55,43 @@ class _LibraryScreenState
 
   Widget _buildList() {
     return StreamBuilder<List<MangaItem>>(
-      stream: presenter.mangaListStream,
-      builder: (context, snapshot) {
+        stream: presenter.mangaListStream,
+        builder: (context, snapshot) {
+          if (snapshot == null || !snapshot.hasData)
+            return getWidgetForState(LoadingState());
 
-        if (snapshot == null || !snapshot.hasData)
-          return getWidgetForState(LoadingState());
+          if (snapshot.hasError)
+            // TODO
+            return getWidgetForState(ErrorState(snapshot.error.toString()));
 
-        if (snapshot.hasError)
-          // TODO
-          return getWidgetForState(ErrorState(snapshot.error.toString()));
+          var items = snapshot.data;
 
-        var items = snapshot.data;
-
-        return AnimationLimiter(
-          child: Scrollbar(
-            child: LoadMore(
-              isFinish: false,
-              whenEmptyLoad: false,
-              textBuilder: (status) => appLocalizations.loading,
-              onLoadMore: presenter.loadData,
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (BuildContext ctxt, int index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 375),
-                    child: SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(
-                        child: _getMangaItem(items[index]),
+          return AnimationLimiter(
+            child: Scrollbar(
+              child: LoadMore(
+                isFinish: false,
+                whenEmptyLoad: false,
+                textBuilder: (status) => appLocalizations.loading,
+                onLoadMore: presenter.loadData,
+                child: ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: _getMangaItem(items[index]),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   Widget _getSubtitle(MangaItem item) {
@@ -154,5 +152,4 @@ class _LibraryScreenState
       ),
     ];
   }
-
 }

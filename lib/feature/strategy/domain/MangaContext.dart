@@ -1,4 +1,3 @@
-import 'package:manga/core/exception/exceptions.dart';
 import 'package:manga/feature/strategy/data/model/MangaDetails.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
 import 'package:manga/feature/strategy/data/source/StrategyHolder.dart';

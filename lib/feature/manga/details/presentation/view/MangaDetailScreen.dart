@@ -5,10 +5,10 @@ import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/core/state/LoadingState.dart';
 import 'package:manga/core/widget/ClickBehaviuor.dart';
 import 'package:manga/di/ModuleContainer.dart';
-import 'package:manga/feature/manga_detail/data/model/MandaDetailParameter.dart';
-import 'package:manga/feature/manga_detail/presentation/presenter/MangaDetailsPresenter.dart';
-import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsState.dart';
-import 'package:manga/feature/manga_detail/presentation/view/MangaDetailsView.dart';
+import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart';
+import 'package:manga/feature/manga/details/presentation/presenter/MangaDetailsPresenter.dart';
+import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
+import 'package:manga/feature/manga/details/presentation/view/MangaDetailsView.dart';
 
 class MangaDetailScreen extends StatefulWidget {
   final MangaDetailParameter _item;

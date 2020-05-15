@@ -1,10 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
-import 'package:manga/feature/reader/data/model/ReaderParameter.dart';
-import 'package:manga/feature/reader/presentation/presenter/ReaderPresenter.dart';
-import 'package:manga/feature/reader/presentation/view/ReaderState.dart';
-import 'package:manga/feature/reader/presentation/view/ReaderView.dart';
+import 'package:manga/feature/manga/reader/data/model/ReaderParameter.dart';
+import 'package:manga/feature/manga/reader/presentation/presenter/ReaderPresenter.dart';
+import 'package:manga/feature/manga/reader/presentation/view/ReaderState.dart';
+import 'package:manga/feature/manga/reader/presentation/view/ReaderView.dart';
 import 'package:flutter/services.dart';
 
 class ReaderScreen extends StatefulWidget {

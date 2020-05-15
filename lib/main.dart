@@ -10,6 +10,7 @@ import 'package:manga/core/firebase/FirebaseUtil.dart';
 import 'package:manga/core/utils/AppLocalizations.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/route/route.dart';
+import 'package:manga/route/transition.dart';
 
 var logger = Logger();
 
@@ -18,7 +19,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   static var injector = ModuleContainer().initialise(Injector.getInjector());
 
   MyApp() {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return MaterialApp(
       localizationsDelegates: [
         // ... app-specific localization delegate[s] here
         AppLocalizationsDelegate(),
@@ -41,9 +41,14 @@ class MyApp extends StatelessWidget {
         const Locale('ru'),
         const Locale('en'),
       ],
-      title: 'Flutter Demo',
+      title: 'MangaBreak',
       navigatorKey: navigator,
-      theme: CupertinoThemeData(
+      onGenerateRoute: (settings) => PageRouteBuilder(
+          pageBuilder: (context, __, ___) =>
+              appRoute[settings.name](context, arguments: settings.arguments),
+          transitionsBuilder: (_, animation, secondaryAnimation, child) =>
+              SlideTransitionFromLeftToRight.getTransition(animation, child)),
+      theme: ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -54,10 +59,11 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primaryColor: Colors.blue,
+        primarySwatch: Colors.amber,
+        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
       ),
       initialRoute: MangaRoute.HOME,
-      routes: appRoute,
+//      routes: appRoute,
     );
   }
-
 }
