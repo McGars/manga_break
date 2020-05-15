@@ -4,8 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/feature/profile/auth/email/presentation/presenter/AuthEmailPresenter.dart';
+import 'package:manga/feature/profile/auth/email/presentation/view/AuthEmailState.dart';
 import 'package:manga/feature/profile/auth/email/presentation/view/AuthEmailView.dart';
-import 'package:manga/feature/profile/auth/main/presentation/view/AuthState.dart';
 
 class AuthEmailScreen extends StatefulWidget {
   @override
@@ -29,14 +29,14 @@ class _AuthEmailScreenState
   @override
   Widget buildWidgetFromState() {
     var state = screenState;
-    if (state is AuthState) {
+    if (state is AuthEmailState) {
       return _wrapWithAppBar(_buildScreen(state));
     } else {
       return _wrapWithAppBar(super.buildWidgetFromState());
     }
   }
 
-  Widget _buildScreen(AuthState state) {
+  Widget _buildScreen(AuthEmailState state) {
     return _buildEmailScreen();
   }
 
@@ -44,43 +44,46 @@ class _AuthEmailScreenState
     return Form(
       key: _formKey,
       autovalidate: _autoValidate,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: appLocalizations.authEmailScreenEnterEmail,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: appLocalizations.authEmailScreenEnterEmail,
+              ),
+              validator: _emailValidator,
+              keyboardType: TextInputType.emailAddress,
+              onSaved: presenter.onEmailSave,
             ),
-            validator: _emailValidator,
-            keyboardType: TextInputType.emailAddress,
-            onSaved: presenter.onEmailSave,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: appLocalizations.authEmailScreenEnterPassword,
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: appLocalizations.authEmailScreenEnterPassword,
+              ),
+              validator: _passwordValidator,
+              onSaved: presenter.onPasswordSave,
             ),
-            validator: _passwordValidator,
-            onSaved: presenter.onPasswordSave,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: () {
-                // Validate will return true if the form is valid, or false if
-                // the form is invalid.
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  presenter.onButtonClicked();
-                } else {
-                  setState(() {
-                    _autoValidate = true;
-                  });
-                }
-              },
-              child: Text('Submit'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: RaisedButton(
+                onPressed: () {
+                  // Validate will return true if the form is valid, or false if
+                  // the form is invalid.
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    presenter.onButtonClicked();
+                  } else {
+                    setState(() {
+                      _autoValidate = true;
+                    });
+                  }
+                },
+                child: Text('Submit'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
