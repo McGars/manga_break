@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:logger/logger.dart';
+import 'package:manga/core/data/ConnectionStatus.dart';
 import 'package:manga/core/data/MangaHttp.dart';
-import 'package:manga/core/firebase/FirebaseUtil.dart';
 import 'package:manga/core/utils/AppLocalizations.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/route/route.dart';
@@ -15,6 +15,7 @@ import 'package:manga/route/transition.dart';
 var logger = Logger();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -22,8 +23,8 @@ class MyApp extends StatelessWidget {
   static var injector = ModuleContainer().initialise(Injector.getInjector());
 
   MyApp() {
-    firebaInit();
     HttpOverrides.global = injector.get<MangaHttpOverrides>();
+    injector.get<ConnectionStatus>().initialize();
   }
 
   // This widget is the root of your application.
@@ -44,10 +45,18 @@ class MyApp extends StatelessWidget {
       title: 'MangaBreak',
       navigatorKey: navigator,
       onGenerateRoute: (settings) => PageRouteBuilder(
-          pageBuilder: (context, __, ___) =>
-              appRoute[settings.name](context, arguments: settings.arguments),
-          transitionsBuilder: (_, animation, secondaryAnimation, child) =>
-              SlideTransitionFromLeftToRight.getTransition(animation, child)),
+          pageBuilder: (context, __, ___) {
+//            logger.d("pageBuilder: ${settings.name}");
+            return appRoute[settings.name](context, arguments: settings.arguments);
+          },
+          transitionsBuilder: (_, animation, secondaryAnimation, child) {
+//            logger.d("transitionsBuilder: ${settings.name}");
+            if (settings.name == MangaRoute.LOADING || settings.name == MangaRoute.HOME)
+              return PageTransition.getTransitionFade(animation, child);
+            else {
+              return PageTransition.getTransitionFromLeftToRight(animation, child);
+            }
+          }),
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -62,7 +71,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
         buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
       ),
-      initialRoute: MangaRoute.HOME,
 //      routes: appRoute,
     );
   }

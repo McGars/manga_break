@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   firebase: ^7.3.0
   cupertino_icons: ^0.1.2
-  webview_flutter: ^0.3.19+8
+#  webview_flutter: ^0.3.19+8
   cached_network_image: ^2.0.0
   html: ^0.14.0+3
   flutter_simple_dependency_injection: ^1.0.2+1
@@ -32,12 +32,16 @@ dependencies:
   http: ^0.12.0+4
   flutter_staggered_animations: "^0.1.2"
 #  animated_stream_list: ^1.1.0
-  logger: ^0.8.3
+  logger: ^0.9.1
   flutter_localizations:
     sdk: flutter
   gesture_zoom_box: ^0.0.2
   extended_image:
     path: ./extended_image
+  shared_preferences: ^0.5.7+2
+  connectivity: ^0.4.8+6
+  encrypt: ^4.0.2
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:

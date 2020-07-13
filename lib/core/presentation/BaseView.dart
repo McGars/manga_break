@@ -5,4 +5,7 @@ abstract class BaseView {
 
   void bindState(BaseState state);
 
+  void showErrorDialog(String text);
+
+
 }

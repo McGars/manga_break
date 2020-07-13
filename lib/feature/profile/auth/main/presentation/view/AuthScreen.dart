@@ -12,7 +12,8 @@ class AuthScreen extends StatefulWidget {
   _AuthScreenState createState() => _AuthScreenState(AuthPresenter());
 }
 
-class _AuthScreenState extends BaseWidgetState<AuthScreen, AuthPresenter> implements AuthView {
+class _AuthScreenState extends BaseWidgetState<AuthScreen, AuthPresenter>
+    implements AuthView {
   _AuthScreenState(AuthPresenter presenter) : super(presenter);
 
   @override
@@ -36,10 +37,21 @@ class _AuthScreenState extends BaseWidgetState<AuthScreen, AuthPresenter> implem
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton.icon(
+            SizedBox(
+              width: 200,
+              child: RaisedButton.icon(
                 onPressed: presenter.onEmailButtonClicked,
                 icon: Icon(Icons.mail),
-                label: Text(appLocalizations.authEmailScreenEmail)),
+                label: Text(appLocalizations.authEmailScreenEmail),
+              ),
+            ),
+            SizedBox(
+              width: 200,
+              child: RaisedButton(
+                onPressed: presenter.onEmailButtonClicked,
+                child: Text(appLocalizations.authScreenRegister),
+              ),
+            ),
 //          RaisedButton.icon(onPressed: presenter.setPhoneView, icon: Icon(Icons.phone_android), label: Text(appLocalizations.authScreenPhone))
           ],
         ),
@@ -55,5 +67,4 @@ class _AuthScreenState extends BaseWidgetState<AuthScreen, AuthPresenter> implem
       body: widget,
     );
   }
-
 }

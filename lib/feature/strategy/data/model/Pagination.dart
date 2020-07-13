@@ -5,4 +5,8 @@ class Pagination {
 
   Pagination(this.page, this.sort, this.genre);
 
+  @override
+  String toString() {
+    return 'Pagination{page: $page, sort: $sort, genre: $genre}';
+  }
 }

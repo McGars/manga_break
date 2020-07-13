@@ -1,9 +1,11 @@
 import 'package:manga/core/state/BaseState.dart';
+import 'package:manga/feature/manga/details/presentation/model/MangaDetailsModel.dart';
 import 'package:manga/feature/strategy/data/model/Chapter.dart';
 
 class MangaDetailsState implements BaseState {
   String title;
   String image;
+  MangaDetailsModel favoriteModel;
 
   /* Nullable */
   String description;
@@ -19,6 +21,7 @@ class MangaDetailsState implements BaseState {
     String description,
     List<Chapter> chapters,
     int currentChapterPosition,
+    bool isFavorite,
   }) {
     this.title = title ?? this.title;
     this.image = imageThumb ?? this.image;
@@ -26,6 +29,8 @@ class MangaDetailsState implements BaseState {
     this.currentChapterPosition =
         currentChapterPosition ?? this.currentChapterPosition;
     this.chapters = chapters ?? this.chapters;
+    this.favoriteModel = favoriteModel ?? MangaDetailsModel();
+    this.favoriteModel.setFavorite = isFavorite ?? false;
     return this;
   }
 }

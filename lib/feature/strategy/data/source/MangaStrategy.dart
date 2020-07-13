@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:manga/feature/strategy/data/model/Chapter.dart';
 import 'package:manga/feature/strategy/data/model/MangaDetails.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';

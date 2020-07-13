@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:manga/core/presentation/BasePresenter.dart';
 import 'package:manga/core/state/BaseState.dart';
 import 'package:manga/core/presentation/BaseView.dart';
+import 'package:manga/core/state/EmptyState.dart';
 import 'package:manga/core/state/ErrorState.dart';
 import 'package:manga/core/state/LoadingState.dart';
+import 'package:manga/core/widget/default_dialogs.dart';
 
 abstract class BaseWidgetState<T extends StatefulWidget,
     P extends BasePresenter> extends State<T> {
@@ -49,6 +51,17 @@ abstract class BaseWidgetState<T extends StatefulWidget,
         alignment: Alignment.center,
         child: Text(state.message),
       );
+    } else if (state is EmptyState) {
+      return Container(
+        alignment: Alignment.center,
+        child: Text(state.message),
+      );
     } else return Container(color: Colors.white,);
   }
+
+  @override
+  void showErrorDialog(String text) {
+    Dialogs.showErrorDialog(context, text);
+  }
+
 }

@@ -2,6 +2,8 @@ import 'package:manga/feature/strategy/data/model/MangaDetails.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
 import 'package:manga/feature/strategy/data/source/StrategyHolder.dart';
 
+import '../../../main.dart';
+
 class MangaContext {
 
   StrategyHolder currentStrategy;

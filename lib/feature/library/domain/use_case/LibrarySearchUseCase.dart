@@ -1,17 +1,24 @@
 import 'dart:async';
+import 'package:manga/feature/library/domain/model/LibraryData.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
 
 class LibrarySearchUseCase {
 
-  List<MangaItem> _mangas = [];
+  LibraryData _libraryData = LibraryData();
 
-  StreamController _controller = StreamController<List<MangaItem>>();
+  StreamController _controller = StreamController<LibraryData>();
 
-  Stream<List<MangaItem>> get mangas => _controller.stream;
+  Stream<LibraryData> get mangas => _controller.stream;
 
   void addMangas(List<MangaItem> items) {
-    _mangas.addAll(items);
-    _controller.add(_mangas);
+    _libraryData.mangas.addAll(items);
+    _libraryData.loadMore = items.isNotEmpty;
+    _controller.add(_libraryData);
+  }
+
+  void setFavorite(String url, bool isFavorite) {
+    _libraryData.mangas.firstWhere((element) => element.url == url).isFavorite = isFavorite;
+    _controller.add(_libraryData);
   }
 
   void addErrors(dynamic error, StackTrace stackTrace) {
@@ -19,7 +26,12 @@ class LibrarySearchUseCase {
   }
 
   void clearMangas() {
-    _mangas.clear();
+    _libraryData.mangas.clear();
+    _controller.add(null);
+  }
+
+  void clearMangasForSearch() {
+    _libraryData.mangas.clear();
   }
 
   void dispose() {

@@ -1,13 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
+import 'package:manga/core/widget/ModalLoadingWidget.dart';
+import 'package:manga/core/widget/default_dialogs.dart';
 import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/feature/profile/auth/email/presentation/presenter/AuthEmailPresenter.dart';
 import 'package:manga/feature/profile/auth/email/presentation/view/AuthEmailState.dart';
 import 'package:manga/feature/profile/auth/email/presentation/view/AuthEmailView.dart';
+import 'package:manga/feature/profile/auth/email/util/validator.dart';
 
 class AuthEmailScreen extends StatefulWidget {
+
   @override
   _AuthEmailScreenState createState() =>
       _AuthEmailScreenState(AuthEmailPresenter());
@@ -18,6 +21,7 @@ class _AuthEmailScreenState
     implements AuthEmailView {
   _AuthEmailScreenState(AuthEmailPresenter presenter) : super(presenter);
 
+  final TextEditingController loginController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var _autoValidate = false;
 
@@ -36,24 +40,67 @@ class _AuthEmailScreenState
     }
   }
 
-  Widget _buildScreen(AuthEmailState state) {
-    return _buildEmailScreen();
+  @override
+  void showTextDialog(String text) {
+    Dialogs.showTextDialog(context, text);
   }
 
-  Widget _buildEmailScreen() {
+  @override
+  void showVerifyDialog(String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(text),
+        actions: [
+          FlatButton(
+            child: Text(appLocalizations.cancel),
+            onPressed:  () {
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text(appLocalizations.authEmailScreenResendCode),
+            onPressed:  () {
+              Navigator.pop(context);
+              presenter.resendCode();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScreen(AuthEmailState state) {
+
+    loginController.text = state.email;
+
+    var screen = [_buildEmailScreen(state)];
+
+    if (state.isLoading) {
+      screen.add(ModalLoadingWidget());
+    }
+
+    return Stack(
+      children: screen,
+    );
+  }
+
+  Widget _buildEmailScreen(AuthEmailState state) {
     return Form(
       key: _formKey,
       autovalidate: _autoValidate,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             TextFormField(
+              controller: loginController,
               decoration: InputDecoration(
                 hintText: appLocalizations.authEmailScreenEnterEmail,
               ),
-              validator: _emailValidator,
+              validator: emailValidator,
               keyboardType: TextInputType.emailAddress,
               onSaved: presenter.onEmailSave,
             ),
@@ -61,25 +108,41 @@ class _AuthEmailScreenState
               decoration: InputDecoration(
                 hintText: appLocalizations.authEmailScreenEnterPassword,
               ),
-              validator: _passwordValidator,
+              obscureText: true,
+              validator: passwordValidator,
               onSaved: presenter.onPasswordSave,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: RaisedButton(
-                onPressed: () {
-                  // Validate will return true if the form is valid, or false if
-                  // the form is invalid.
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    presenter.onButtonClicked();
-                  } else {
-                    setState(() {
-                      _autoValidate = true;
-                    });
-                  }
-                },
-                child: Text('Submit'),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: RaisedButton(
+                      onPressed: () {
+                        // Validate will return true if the form is valid, or false if
+                        // the form is invalid.
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          presenter.onButtonClicked();
+                        } else {
+                          setState(() {
+                            _autoValidate = true;
+                          });
+                        }
+                      },
+                      child: Text(appLocalizations.authEmailScreenSignIn),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: OutlineButton(
+                      textColor: Colors.black,
+                      onPressed: presenter.onRegistrationClicked,
+                      child: Text(appLocalizations.authScreenRegister),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -97,20 +160,15 @@ class _AuthEmailScreenState
     );
   }
 
-  String _passwordValidator(String value) {
-    if (value.isEmpty) {
-      return appLocalizations.errorEmpty;
-    }
-    return null;
+  @override
+  void goBackSuccess() {
+    Navigator.pop(context, true);
   }
 
-  String _emailValidator(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return appLocalizations.authEmailScreenEnterValidEmail;
-    else
-      return null;
+  @override
+  void dispose() {
+    super.dispose();
+    loginController.dispose();
   }
+
 }

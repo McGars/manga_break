@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/core/state/LoadingState.dart';
-import 'package:manga/core/widget/ClickBehaviuor.dart';
-import 'package:manga/di/ModuleContainer.dart';
 import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart';
+import 'package:manga/feature/manga/details/presentation/model/MangaDetailsModel.dart';
 import 'package:manga/feature/manga/details/presentation/presenter/MangaDetailsPresenter.dart';
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsView.dart';
+import 'package:manga/feature/manga/details/presentation/widgets/FavoriteToolbarWidget.dart';
+import 'package:manga/feature/manga/details/presentation/widgets/PlayBottomBarWidget.dart';
+import 'package:provider/provider.dart';
 
 class MangaDetailScreen extends StatefulWidget {
   final MangaDetailParameter _item;
@@ -70,6 +72,16 @@ class _MangaDetailScreenState
               title: _appBarTitle(state),
               background: _appBarBackground(state),
             ),
+            actions: [
+              ChangeNotifierProvider<MangaDetailsModel>(
+                create: (context) => state.favoriteModel,
+                child: FavoriteToolbarWidget(presenter.onFavoriteButtonClickedProvider),
+              ),
+//              IconButton(
+//                icon: state.isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
+//                onPressed: presenter.onFavoriteButtonClicked,
+//              )
+            ],
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -82,7 +94,8 @@ class _MangaDetailScreenState
           ),
         ],
       ),
-      bottomNavigationBar: _bottomBar(state),
+      bottomNavigationBar: PlayBottomBarWidget(state, presenter),
+//      bottomNavigationBar: _bottomBar(state),
     );
   }
 
@@ -128,85 +141,6 @@ class _MangaDetailScreenState
         title: new Text(_getTitle()),
       ),
       body: widget,
-    );
-  }
-
-  //************* Bottom Bar */
-  Widget _bottomBar(MangaDetailsState state) {
-    return Container(
-      color: Colors.white,
-      height: 56,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _wrapBotomBarItem(_numberOfChapters(state)),
-          _playButtons(state),
-        ],
-      ),
-    );
-  }
-
-  Widget _numberOfChapters(MangaDetailsState state) {
-    var titleStyle = Theme.of(context).textTheme.subtitle1;
-    var subtitleStyle = Theme.of(context).textTheme.caption;
-    var chaptersCount = state.chapters.length;
-
-    List<Widget> body;
-    if (chaptersCount == 0) {
-      body = <Widget>[
-        Text(appLocalizations.detailsScreenEmptyChapters, style: titleStyle)
-      ];
-    } else {
-      body = <Widget>[
-        Text(
-          "${state.currentChapterPosition + 1} ${appLocalizations.ofTest} $chaptersCount",
-          style: titleStyle,
-        ),
-        Text(
-          appLocalizations.detailsScreenChaptersSubTitle,
-          style: subtitleStyle,
-        ),
-      ];
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: body,
-    );
-  }
-
-  Widget _playButtons(MangaDetailsState state) {
-    if (state.chapters.isEmpty) {
-      return Container();
-    }
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Row(
-        children: <Widget>[
-          wrapCircleTransparentClick(
-            Icon(Icons.skip_previous),
-            () => presenter.onClickChapterPrevious(),
-          ),
-          wrapCircleTransparentClick(
-            Icon(Icons.play_arrow),
-            () => presenter.onClickChapterPlay(),
-          ),
-          wrapCircleTransparentClick(
-            Icon(Icons.skip_next),
-            () => presenter.onClickChapterNext(),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _wrapBotomBarItem(Widget widget) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
-      height: 56,
-      child: widget,
     );
   }
 }
