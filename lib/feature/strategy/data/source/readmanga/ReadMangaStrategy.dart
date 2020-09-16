@@ -41,10 +41,9 @@ class ReadMangaStrategy implements MangaStrategy {
 
   @override
   Future<List<MangaPage>> getMangaPage(Chapter chapter) async {
-    logger.d("getMangaPage");
     var response = await http.get(chapter.url);
     var document = parse(response.body);
-    return ReadMangaPageConverter().convert(document);
+    return ReadMangaPageConverter().convert(document, chapter);
   }
 
   @override

@@ -4,8 +4,8 @@ import 'package:manga/feature/strategy/data/source/MangaStrategy.dart';
 class ReaderParameter {
 
   List <Chapter> chapters;
-  int currentPosition;
+  int currentChapterPosition;
   MangaStrategy strategy;
 
-  ReaderParameter(this.chapters, this.currentPosition, this.strategy);
+  ReaderParameter(this.chapters, this.currentChapterPosition, this.strategy);
 }

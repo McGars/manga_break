@@ -15,7 +15,6 @@ import 'package:manga/feature/library/presentation/presenter/LibraryPresenter.da
 import 'package:manga/feature/library/presentation/view/LibraryState.dart';
 import 'package:manga/feature/library/presentation/view/LibraryView.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
-import 'package:manga/main.dart';
 
 class LibraryScreen extends StatefulWidget {
   final injector = LibraryModule.inject(UniqueKey());

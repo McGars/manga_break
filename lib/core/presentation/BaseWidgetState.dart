@@ -60,6 +60,7 @@ abstract class BaseWidgetState<T extends StatefulWidget,
   }
 
   @override
+  // ignore: override_on_non_overriding_member
   void showErrorDialog(String text) {
     Dialogs.showErrorDialog(context, text);
   }

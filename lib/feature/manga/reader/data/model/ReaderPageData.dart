@@ -1,10 +1,10 @@
-import 'package:manga/feature/strategy/data/model/MangaItem.dart';
+import 'package:manga/feature/strategy/data/model/MangaPage.dart';
 
-class LibraryData {
+class ReaderPageData {
 
-  List<MangaItem> mangas = [];
+  List<MangaPage> pages;
 
-  bool loadMore = true;
+  int initialPosition;
 
-  LibraryData();
+  ReaderPageData(this.pages, this.initialPosition);
 }
