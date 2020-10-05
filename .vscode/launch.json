@@ -8,12 +8,6 @@
             "name": "manga",
             "request": "launch",
             "type": "dart"
-        },
-        {
-            "name": "extended_image",
-            "cwd": "extended_image",
-            "request": "launch",
-            "type": "dart"
         }
     ]
 }

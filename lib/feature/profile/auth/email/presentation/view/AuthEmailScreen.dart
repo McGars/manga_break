@@ -88,7 +88,7 @@ class _AuthEmailScreenState
   Widget _buildEmailScreen(AuthEmailState state) {
     return Form(
       key: _formKey,
-      autovalidate: _autoValidate,
+      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

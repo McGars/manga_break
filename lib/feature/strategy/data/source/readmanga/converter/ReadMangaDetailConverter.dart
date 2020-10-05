@@ -31,7 +31,7 @@ class ReadMangaDetailConverter {
       genres: getGenres(meta),
       year: getYear(meta),
       url: mangaItem.url,
-      chapters: getChapters(content.parent)
+      chapters: getChapters(content.parent, mangaItem.name)
     );
   }
 
@@ -79,14 +79,14 @@ class ReadMangaDetailConverter {
     return span.first.attributes["score"];
   }
 
-  List<Chapter> getChapters(Element content) {
+  List<Chapter> getChapters(Element content, String mangaName) {
     var result = <Chapter>[];
     var span = content.querySelector("div.chapters-link");
     if (span == null) return result;
 
     return span.getElementsByTagName("a").map((e) {
       String url = e.attributes["href"].checkHttps(ReadMangaStrategy.host);
-      String name = e.text;
+      String name = e.text.replaceAll(RegExp(' +'), ' ').replaceAll("\n", " ").trim().replaceFirst(mangaName, "");
       return Chapter(name, url);
     }).toList();
   }

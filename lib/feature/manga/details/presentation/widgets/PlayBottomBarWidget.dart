@@ -5,7 +5,6 @@ import 'package:manga/feature/manga/details/presentation/presenter/MangaDetailsP
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
 
 class PlayBottomBarWidget extends StatelessWidget {
-
   final MangaDetailsState state;
   final MangaDetailsPresenter presenter;
 
@@ -21,20 +20,18 @@ class PlayBottomBarWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.only(
-                left: 16, top: 8, right: 16, bottom: 8),
+            padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
             height: 56,
             child: _NumberOfChaptersWidget(state),
           ),
           _PlayButtonsWidget(state, presenter),
         ],
-      ),);
+      ),
+    );
   }
-
 }
 
 class _NumberOfChaptersWidget extends StatelessWidget {
-
   final MangaDetailsState state;
 
   _NumberOfChaptersWidget(this.state);
@@ -72,7 +69,6 @@ class _NumberOfChaptersWidget extends StatelessWidget {
 }
 
 class _PlayButtonsWidget extends StatelessWidget {
-
   final MangaDetailsState state;
   final MangaDetailsPresenter presenter;
 
@@ -84,20 +80,24 @@ class _PlayButtonsWidget extends StatelessWidget {
       return Container();
     }
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: Row(
         children: <Widget>[
           wrapCircleTransparentClick(
             Icon(Icons.skip_previous),
-                () => presenter.onClickChapterPrevious(),
+            () => presenter.onClickChapterPrevious(),
           ),
           wrapCircleTransparentClick(
             Icon(Icons.play_arrow),
-                () => presenter.onClickChapterPlay(),
+            () => presenter.onClickChapterPlay(),
           ),
           wrapCircleTransparentClick(
             Icon(Icons.skip_next),
-                () => presenter.onClickChapterNext(),
+            () => presenter.onClickChapterNext(),
+          ),
+          wrapCircleTransparentClick(
+            Icon(Icons.list_outlined),
+            () => presenter.onClickList(),
           )
         ],
       ),

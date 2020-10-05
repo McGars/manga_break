@@ -70,7 +70,7 @@ class _AuthRegistrationScreenState
   Widget _buildEmailScreen() {
     return Form(
       key: _formKey,
-      autovalidate: _autoValidate,
+      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

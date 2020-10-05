@@ -44,19 +44,19 @@ class MyApp extends StatelessWidget {
       ],
       title: 'MangaBreak',
       navigatorKey: navigator,
-      onGenerateRoute: (settings) => PageRouteBuilder(
-          pageBuilder: (context, __, ___) {
+      onGenerateRoute: (settings) =>
+          PageRouteBuilder(pageBuilder: (context, __, ___) {
 //            logger.d("pageBuilder: ${settings.name}");
-            return appRoute[settings.name](context, arguments: settings.arguments);
-          },
-          transitionsBuilder: (_, animation, secondaryAnimation, child) {
+        return appRoute[settings.name](context, arguments: settings.arguments);
+      }, transitionsBuilder: (_, animation, secondaryAnimation, child) {
 //            logger.d("transitionsBuilder: ${settings.name}");
-            if (settings.name == MangaRoute.LOADING || settings.name == MangaRoute.HOME)
-              return PageTransition.getTransitionFade(animation, child);
-            else {
-              return PageTransition.getTransitionFromLeftToRight(animation, child);
-            }
-          }),
+        if (settings.name == MangaRoute.LOADING ||
+            settings.name == MangaRoute.HOME)
+          return PageTransition.getTransitionFade(animation, child);
+        else {
+          return PageTransition.getTransitionFromLeftToRight(animation, child);
+        }
+      }),
       theme: ThemeData(
         // This is the theme of your application.
         //

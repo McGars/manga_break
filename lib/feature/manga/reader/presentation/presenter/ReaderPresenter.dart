@@ -9,7 +9,6 @@ import 'package:manga/feature/manga/reader/presentation/view/ReaderState.dart';
 import 'package:manga/feature/manga/reader/presentation/view/ReaderView.dart';
 import 'package:manga/feature/strategy/data/model/Chapter.dart';
 import 'package:manga/feature/strategy/data/model/MangaPage.dart';
-import 'package:manga/main.dart';
 
 class ReaderPresenter extends BasePresenter<ReaderView> {
   ReaderParameter _parameter;
@@ -17,7 +16,7 @@ class ReaderPresenter extends BasePresenter<ReaderView> {
   PageCacheUseCase _pages;
 
   int _currentChapterPosition;
-  int _lastSelectedPage;
+  int _lastSelectedPage = -1;
   List<MangaPage> _previousPages;
 
   StreamController _controller = StreamController<ReaderPageData>();
@@ -45,24 +44,33 @@ class ReaderPresenter extends BasePresenter<ReaderView> {
   
   void handleChapterPages(List<MangaPage> pages) {
 
+    var initialPositionDirection = _lastSelectedPage == 0 ? InitialPagePosition.END : InitialPagePosition.START;
+    var initialPosition = 0;
+
     // TODO оптимизировать last
     var lastChapter = pages.last.parent;
     var chapterLastPosition = getChapterPosition(lastChapter);
     if (_parameter.chapters.length - 1 > chapterLastPosition) {
-      pages.add(LoadingMangaPage(lastChapter));
+      pages.add(LoadingMangaPage(lastChapter, InitialPagePosition.END));
+      if (initialPositionDirection == InitialPagePosition.END) {
+        initialPosition = pages.length - 2;
+      }
+    } else if (initialPositionDirection == InitialPagePosition.END) {
+      initialPosition = pages.length - 1;
     }
 
     var firstChapter = pages.first.parent;
     var chapterFistPosition = getChapterPosition(firstChapter);
     if (chapterFistPosition > 0) {
-      pages.insert(0, LoadingMangaPage(firstChapter));
+      if (initialPositionDirection == InitialPagePosition.START) {
+        initialPosition = 1;
+      }
+      pages.insert(0, LoadingMangaPage(firstChapter, InitialPagePosition.START));
     }
 
-
-
     _previousPages = pages;
-    
-    _controller.add(ReaderPageData(pages, 0));
+
+    _controller.add(ReaderPageData(pages, initialPosition));
   }
 
   void onPageChanged(int page) {
@@ -78,22 +86,6 @@ class ReaderPresenter extends BasePresenter<ReaderView> {
         _pages.loadChapterPages(chapterPosition - (page == 0 ? 1 : -1));
       }
     }
-//
-//
-//    logger.d("page: $page, currentChapterPosition: $_currentChapterPosition");
-//    if (_currentChapterPosition > 0 && page == 0) {
-//      _currentChapterPosition--;
-//      logger.d("minus");
-//      _pages.loadChapterPages(_currentChapterPosition);
-//    } else if (_previousPages.length - 1 == page
-//        && _parameter.chapters.length - 1 > _currentChapterPosition) {
-//      _currentChapterPosition++;
-//      logger.d("plus");
-//      _pages.loadChapterPages(_currentChapterPosition);
-//    } else {
-//      logger.d("set");
-//      _lastSelectedPage = page;
-//    }
 
   }
 

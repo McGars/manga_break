@@ -8,6 +8,7 @@ import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsView.dart';
 import 'package:manga/feature/manga/reader/data/model/ReaderParameter.dart';
+import 'package:manga/feature/profile/personal/domain/use_case/MangaUserUseCase.dart';
 import 'package:manga/feature/strategy/data/model/MangaDetails.dart';
 import 'package:manga/main.dart';
 import 'package:manga/route/route.dart';
@@ -17,6 +18,7 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
   MangaDetailsState _state;
 
   var _firebaseDatabaseUseCase = MyApp.injector.get<FirebaseDatabaseUseCase>();
+  var _mangaUserUseCase = MyApp.injector.get<MangaUserUseCase>();
 
   MangaDetailsPresenter(this._parameters) {
     _state = MangaDetailsState(title: _parameters.item.name);
@@ -56,6 +58,12 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
     MangaNavigator.openReaderScreen(ReaderParameter(
         _state.chapters, _state.currentChapterPosition, _parameters.strategy));
   }
+  
+  onClickChapterSelected(int position) {
+    // TODO update bottom controller
+    _state.currentChapterPosition = position;
+    onClickChapterPlay();
+  }
 
   onClickChapterNext() {
     if (_state.chapters == null ||
@@ -71,9 +79,15 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
       return;
     }
 
+    if (!_mangaUserUseCase.currentUser.isAuthorize) {
+      MangaNavigator.openAuthScreen();
+      return;
+    }
+
     _state.favoriteModel.setLoading = true;
 
     _state.favoriteModel.isFavorite
+        // TODO error auth
         ? await _firebaseDatabaseUseCase.removeFromFavorite(_parameters.item)
         : await _firebaseDatabaseUseCase.addToFavorite(_parameters.item);
 
@@ -81,9 +95,13 @@ class MangaDetailsPresenter extends BasePresenter<MangaDetailsView> {
 
     // update favorite in list
     injectHolder.get<LibraryScreen>().forEach((injector) {
-      injector.get<LibrarySearchUseCase>().setFavorite(_parameters.item.url, _state.favoriteModel.isFavorite);
+      injector
+          .get<LibrarySearchUseCase>()
+          .setFavorite(_parameters.item.url, _state.favoriteModel.isFavorite);
     });
-
   }
 
+  void onClickList() {
+    view.showChapterList();
+  }
 }

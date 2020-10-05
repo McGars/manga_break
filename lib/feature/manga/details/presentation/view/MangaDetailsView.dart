@@ -1,3 +1,7 @@
 import 'package:manga/core/presentation/BaseView.dart';
 
-abstract class MangaDetailsView implements BaseView {}
+abstract class MangaDetailsView implements BaseView {
+
+    void showChapterList();
+
+}

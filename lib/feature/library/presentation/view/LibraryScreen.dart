@@ -70,13 +70,12 @@ class _LibraryScreenState extends BaseWidgetState<LibraryScreen, LibraryPresente
     return StreamBuilder<LibraryData>(
         stream: presenter.mangaListStream,
         builder: (context, snapshot) {
-          if (snapshot == null || !snapshot.hasData) {
+
+          if (snapshot?.hasError == true) {
+            return getWidgetForState(ErrorState(snapshot.error.toString()));
+          } else if (snapshot == null || !snapshot.hasData) {
             return getWidgetForState(LoadingState());
           }
-
-          if (snapshot.hasError)
-            // TODO
-            return getWidgetForState(ErrorState(snapshot.error.toString()));
 
           var items = snapshot.data.mangas;
 

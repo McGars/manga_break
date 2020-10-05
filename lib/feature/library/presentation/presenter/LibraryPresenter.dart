@@ -45,9 +45,7 @@ class LibraryPresenter extends BasePresenter<LibraryView> {
         : _mangaContext.search(_viewState.searchText, _currentPage++);
 
     await query
-        .then((value) {
-          _librarySearchUseCase.addMangas(value);
-        })
+        .then(_librarySearchUseCase.addMangas)
         .catchError(_librarySearchUseCase.addErrors);
 
     return true;

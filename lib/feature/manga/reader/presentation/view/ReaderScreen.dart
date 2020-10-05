@@ -20,6 +20,7 @@ class ReaderScreen extends StatefulWidget {
 
   @override
   _ReaderScreenState createState() => _ReaderScreenState(_parameter);
+
 }
 
 class _ReaderScreenState extends BaseWidgetState<ReaderScreen, ReaderPresenter>
@@ -30,6 +31,8 @@ class _ReaderScreenState extends BaseWidgetState<ReaderScreen, ReaderPresenter>
   Function animationListener;
 
   Animation<double> _animation;
+
+  PageController _pageControler;
 
   _ReaderScreenState(ReaderParameter parameter)
       : super(ReaderPresenter(parameter));
@@ -74,11 +77,19 @@ class _ReaderScreenState extends BaseWidgetState<ReaderScreen, ReaderPresenter>
           return getWidgetForState(EmptyState(appLocalizations.empty));
         }
 
+        var position = snapshot.data.initialPosition;
+        
+        if (_pageControler == null) {
+          _pageControler = PageController(
+              initialPage: position, keepPage: false);
+        } else if (_pageControler.page != position.toDouble()){
+          _pageControler.jumpToPage(position);
+        }
+
         return ExtendedImageGesturePageView.builder(
           physics: ClampingScrollPhysics(),
           itemCount: items.length,
-          controller: PageController(
-              initialPage: state.initialPosition, keepPage: false),
+          controller: _pageControler,
           onPageChanged: presenter.onPageChanged,
           itemBuilder: (BuildContext ctxt, int index) {
             var item = items[index];

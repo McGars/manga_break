@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:manga/core/presentation/BaseWidgetState.dart';
 import 'package:manga/core/state/LoadingState.dart';
 import 'package:manga/feature/manga/details/data/model/MandaDetailParameter.dart';
@@ -8,6 +9,7 @@ import 'package:manga/feature/manga/details/presentation/model/MangaDetailsModel
 import 'package:manga/feature/manga/details/presentation/presenter/MangaDetailsPresenter.dart';
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsState.dart';
 import 'package:manga/feature/manga/details/presentation/view/MangaDetailsView.dart';
+import 'package:manga/feature/manga/details/presentation/widgets/ChapterListSheetWidget.dart';
 import 'package:manga/feature/manga/details/presentation/widgets/FavoriteToolbarWidget.dart';
 import 'package:manga/feature/manga/details/presentation/widgets/PlayBottomBarWidget.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,7 @@ class MangaDetailScreen extends StatefulWidget {
 
 class _MangaDetailScreenState
     extends BaseWidgetState<MangaDetailScreen, MangaDetailsPresenter>
+    with TickerProviderStateMixin
     implements MangaDetailsView {
   _MangaDetailScreenState(MangaDetailParameter item)
       : super(MangaDetailsPresenter(item));
@@ -45,6 +48,17 @@ class _MangaDetailScreenState
     }
   }
 
+  @override
+  void showChapterList() {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true, // set this to true
+      builder: (_) =>
+          ChapterListSheetWidget(screenState, presenter.onClickChapterSelected),
+    );
+  }
+
   String _getTitle() {
     var state = screenState;
     return state is MangaDetailsState ? state.title : "";
@@ -53,46 +67,51 @@ class _MangaDetailScreenState
   Widget _buildDetails(MangaDetailsState state) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: <Widget>[
-          SliverAppBar(
-            stretch: true,
-            onStretchTrigger: () {
-              // Function callback for stretch
-              return;
-            },
-            expandedHeight: 200.0,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: <StretchMode>[
-                StretchMode.zoomBackground,
-                StretchMode.fadeTitle,
-              ],
-              centerTitle: true,
-              title: _appBarTitle(state),
-              background: _appBarBackground(state),
-            ),
-            actions: [
-              ChangeNotifierProvider<MangaDetailsModel>(
-                create: (context) => state.favoriteModel,
-                child: FavoriteToolbarWidget(presenter.onFavoriteButtonClickedProvider),
-              ),
+      body: AnimationConfiguration.synchronized(
+        child: FadeInAnimation(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: <Widget>[
+              SliverAppBar(
+                stretch: true,
+                onStretchTrigger: () {
+                  // Function callback for stretch
+                  return;
+                },
+                expandedHeight: 200.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: <StretchMode>[
+                    StretchMode.zoomBackground,
+                    StretchMode.fadeTitle,
+                  ],
+                  centerTitle: true,
+                  title: _appBarTitle(state),
+                  background: _appBarBackground(state),
+                ),
+                actions: [
+                  ChangeNotifierProvider<MangaDetailsModel>(
+                    create: (context) => state.favoriteModel,
+                    child: FavoriteToolbarWidget(
+                        presenter.onFavoriteButtonClickedProvider),
+                  ),
 //              IconButton(
 //                icon: state.isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
 //                onPressed: presenter.onFavoriteButtonClicked,
 //              )
+                ],
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  const SizedBox(height: 8),
+                  ListTile(
+                    title: Text(state.description),
+                  ),
+                  // ListTiles++
+                ]),
+              ),
             ],
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              const SizedBox(height: 8),
-              ListTile(
-                title: Text(state.description),
-              ),
-              // ListTiles++
-            ]),
-          ),
-        ],
+        ),
       ),
       bottomNavigationBar: PlayBottomBarWidget(state, presenter),
 //      bottomNavigationBar: _bottomBar(state),

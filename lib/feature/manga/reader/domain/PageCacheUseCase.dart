@@ -27,15 +27,16 @@ class PageCacheUseCase {
     }
 
     if (!pageSource.isLoading) {
-       pageSource.loadMangaPage().then((_) => _pages.values
-          .where((element) => element.hasData())
-          .map((value) => value.getMangaPage()))
+       pageSource.loadMangaPage()
+          // .then((_) => _pages.values
+          // .where((element) => element.hasData())
+          // .map((value) => value.getMangaPage()))
           .then((value) {
-            var list = value.reduce((value, element) {
-              value.addAll(element);
-              return value;
-            });
-            _controller.add(list);
+            // var list = value.reduce((value, element) {
+            //   value.addAll(element);
+            //   return value;
+            // });
+            _controller.add(value);
           })
        ;
     }

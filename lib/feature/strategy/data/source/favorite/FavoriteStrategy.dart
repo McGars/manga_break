@@ -9,7 +9,6 @@ import 'package:manga/feature/strategy/data/model/Pagination.dart';
 import 'package:manga/feature/strategy/data/source/MangaStrategy.dart';
 import 'package:manga/feature/strategy/data/source/StrategyHolder.dart';
 import 'package:manga/feature/strategy/data/util/strategies_util.dart';
-import 'package:manga/main.dart';
 
 class FavoriteStrategy implements MangaStrategy {
 

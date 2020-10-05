@@ -12,15 +12,16 @@ class PagesSource {
 
   PagesSource(this._mangaStrategy, this._chapter);
 
-  List<MangaPage> getMangaPage() => _pages ?? <MangaPage>[];
+  List<MangaPage> getMangaPage() => _pages.toList() ?? <MangaPage>[];
 
   Future<List<MangaPage>> loadMangaPage() async {
-    if (_pages != null) return _pages;
+    if (_pages != null) return Future.delayed(Duration(milliseconds: 300)).then((value) => getMangaPage());
     else {
       isLoading = true;
       return _mangaStrategy
         .getMangaPage(_chapter)
         .then((value) => _pages = value)
+        .then((value) => getMangaPage())
         .whenComplete(() => isLoading = false);
     }
   }

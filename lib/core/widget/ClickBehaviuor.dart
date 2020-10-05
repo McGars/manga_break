@@ -8,7 +8,7 @@ Widget wrapCircleTransparentClick(Widget widget, Function fun) {
       child: InkWell(
         customBorder: new CircleBorder(),
         child: Container(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
           child: widget,
         ),
         onTap: fun,

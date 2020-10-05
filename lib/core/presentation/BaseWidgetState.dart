@@ -8,7 +8,7 @@ import 'package:manga/core/state/LoadingState.dart';
 import 'package:manga/core/widget/default_dialogs.dart';
 
 abstract class BaseWidgetState<T extends StatefulWidget,
-    P extends BasePresenter> extends State<T> {
+    P extends BasePresenter> extends State<T> with WidgetsBindingObserver {
   P presenter;
 
   BaseWidgetState(this.presenter);
@@ -16,6 +16,7 @@ abstract class BaseWidgetState<T extends StatefulWidget,
   BaseState screenState;
 
   @override
+  // ignore: override_on_non_overriding_member
   void bindState(BaseState state) => setState(() => screenState = state);
 
   @override
@@ -63,6 +64,11 @@ abstract class BaseWidgetState<T extends StatefulWidget,
   // ignore: override_on_non_overriding_member
   void showErrorDialog(String text) {
     Dialogs.showErrorDialog(context, text);
+  }
+
+  @override
+  Future<bool> didPopRoute() {
+    return Future<bool>.value(false);
   }
 
 }

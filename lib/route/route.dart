@@ -10,7 +10,6 @@ import 'package:manga/feature/profile/auth/registration/presentation/view/AuthRe
 import 'package:manga/main.dart';
 
 final GlobalKey<NavigatorState> navigator = new GlobalKey<NavigatorState>();
-
 class MangaRoute {
   static const String ROOT = "/";
   static const String HOME = "/home";

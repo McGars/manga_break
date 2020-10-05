@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:manga/feature/library/domain/model/LibraryData.dart';
 import 'package:manga/feature/strategy/data/model/MangaItem.dart';
+import 'package:manga/main.dart';
 
 class LibrarySearchUseCase {
 
@@ -23,6 +24,7 @@ class LibrarySearchUseCase {
 
   void addErrors(dynamic error, StackTrace stackTrace) {
     _controller.addError(error, stackTrace);
+    logger.d("addErrors");
   }
 
   void clearMangas() {
